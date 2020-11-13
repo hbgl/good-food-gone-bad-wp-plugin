@@ -37,6 +37,10 @@ if ( ! defined( 'WPINC' ) ) {
  */
 define( 'GFGB_VERSION', '1.0.0' );
 
+
+require_once __DIR__ . '/includes/constants.php';
+require_once __DIR__ . '/includes/helpers.php';
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-gfgb-activator.php

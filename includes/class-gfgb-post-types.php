@@ -45,6 +45,13 @@ class Gfgb_PostTypes
             'labels' => array(
                 'name' => __('Food Categories', 'gfgb'),
                 'singular_name' => __('Food Category', 'gfgb'),
+                'all_items' => __('All Food Categories', 'gfgb'),
+                'edit_item' => __('Edit Food Category', 'gfgb'),
+                'view_item' => __('View Food Category', 'gfgb'),
+                'update_item' => __('Update Food Category', 'gfgb'),
+                'add_new_item' => __('Add New Food Category', 'gfgb'),
+                'new_item_name' => __('New Food Category Name', 'gfgb'),
+                'parent_item' => __('Parent Food Category', 'gfgb'),
             ),
             'public' => true,
             'show_in_rest' => true,

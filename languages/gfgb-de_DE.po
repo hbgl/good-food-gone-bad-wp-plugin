@@ -37,40 +37,40 @@ msgstr ""
 #: includes/class-gfgb-post-types.php:26
 #: includes/class-gfgb-post-types.php:27
 msgid "Food"
-msgstr ""
+msgstr "Nahrung"
 
 #: includes/class-gfgb-post-types.php:46
 msgid "Food Categories"
-msgstr ""
+msgstr "Nahrungskategorien"
 
 #: includes/class-gfgb-post-types.php:47
 msgid "Food Category"
-msgstr ""
+msgstr "Nahrungskategorie"
 
 #: includes/class-gfgb-post-types.php:48
 msgid "All Food Categories"
-msgstr ""
+msgstr "Alle Nahrungskategorien"
 
 #: includes/class-gfgb-post-types.php:49
 msgid "Edit Food Category"
-msgstr ""
+msgstr "Nahrungskategorie bearbeiten"
 
 #: includes/class-gfgb-post-types.php:50
 msgid "View Food Category"
-msgstr ""
+msgstr "Nahrungskategorie ansehen"
 
 #: includes/class-gfgb-post-types.php:51
 msgid "Update Food Category"
-msgstr ""
+msgstr "Nahrungskategorie speichern"
 
 #: includes/class-gfgb-post-types.php:52
 msgid "Add New Food Category"
-msgstr ""
+msgstr "Neue Nahrungskategorie hinzufügen"
 
 #: includes/class-gfgb-post-types.php:53
 msgid "New Food Category Name"
-msgstr ""
+msgstr "Neue Nahrungskategorie Name"
 
 #: includes/class-gfgb-post-types.php:54
 msgid "Parent Food Category"
-msgstr ""
+msgstr "Übergeordnete Nahrungskategorie"

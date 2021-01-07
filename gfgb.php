@@ -39,6 +39,7 @@ define('GFGB_PLUGIN_DIR', __DIR__);
 require_once GFGB_PLUGIN_DIR . '/includes/constants.php';
 require_once GFGB_PLUGIN_DIR . '/includes/helpers.php';
 require_once GFGB_PLUGIN_DIR . '/shortcode/food-categories/controller.php';
+require_once GFGB_PLUGIN_DIR . '/shortcode/quiz/controller.php';
 
 add_action('plugins_loaded', function () {
 	load_plugin_textdomain(
@@ -125,6 +126,10 @@ add_action('carbon_fields_register_fields', function () {
 add_action('init', function () {
 	add_shortcode('gfgb_food_categories', function ($atts, $content, $shortcode_tag) {
 		return gfgb_shortcode_food_categories($atts, $content, $shortcode_tag);
+	});	
+
+	add_shortcode('gfgb_quiz', function ($atts, $content, $shortcode_tag) {
+		return gfgb_shortcode_quiz($atts, $content, $shortcode_tag);
 	});	
 });
 

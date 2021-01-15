@@ -29,8 +29,8 @@ use Carbon_Fields\Container\Container;
 use Carbon_Fields\Field\Field;
 
 // If this file is called directly, abort.
-if (!defined( 'WPINC' ) ) {
-	die;
+if (!defined('WPINC')) {
+    die;
 }
 
 define('GFGB_VERSION', '1.0.0');
@@ -38,143 +38,134 @@ define('GFGB_PLUGIN_DIR', __DIR__);
 
 require_once GFGB_PLUGIN_DIR . '/includes/constants.php';
 require_once GFGB_PLUGIN_DIR . '/includes/helpers.php';
-require_once GFGB_PLUGIN_DIR . '/shortcode/food-categories/controller.php';
+require_once GFGB_PLUGIN_DIR . '/shortcode/food-list/controller.php';
 require_once GFGB_PLUGIN_DIR . '/shortcode/quiz/controller.php';
+require_once GFGB_PLUGIN_DIR . '/includes/wc-breadcrumbs-extension.php';
 
+/**
+ * Load textdomain.
+ */
 add_action('plugins_loaded', function () {
-	load_plugin_textdomain(
-		'gfgb',
-		false,
-		dirname(plugin_basename(__FILE__)) . '/languages/'
-	);
+    load_plugin_textdomain(
+        'gfgb',
+        false,
+        dirname(plugin_basename(__FILE__)) . '/languages/'
+    );
 });
 
+/**
+ * Register food post type.
+ */
 add_action('init', function () {
-	register_post_type(
-		GFGB_POST_TYPE_FOOD,
-		array(
-			'labels' => array(
-				'name' => __('Food', 'gfgb'),
-				'singular_name' => __('Food', 'gfgb'),
-			),
-			'public' => true,
-			'exclude_from_search' => false,
-			'publicly_queryable' => true,
-			'show_in_rest' => true,
-			'supports' => array( 'title', 'custom-fields', 'editor', 'trackbacks', 'excerpt' ),
-			'has_archive' => true,
-			'delete_with_user' => false,
-			'menu_icon' => 'dashicons-carrot',
-			'rewrite' => array(
-				'slug' => GFGB_SLUG_FOOD,
-				'with_front' => false,
-			),
-		)
-	);
-
-	register_taxonomy(GFGB_TAXONOMY_FOOD_CATEGORY, array( GFGB_POST_TYPE_FOOD ), array(
-		'labels' => array(
-			'name' => __('Food Categories', 'gfgb'),
-			'singular_name' => __('Food Category', 'gfgb'),
-			'all_items' => __('All Food Categories', 'gfgb'),
-			'edit_item' => __('Edit Food Category', 'gfgb'),
-			'view_item' => __('View Food Category', 'gfgb'),
-			'update_item' => __('Update Food Category', 'gfgb'),
-			'add_new_item' => __('Add New Food Category', 'gfgb'),
-			'new_item_name' => __('New Food Category Name', 'gfgb'),
-			'parent_item' => __('Parent Food Category', 'gfgb'),
-		),
-		'hierarchical' => true,
-		'public' => true,
-		'show_in_rest' => true,
-		'rewrite' => array(
-			'slug' => GFGB_SLUG_FOOD_CATEGORY,
-			'query_var' => GFGB_QUERY_VAR_FOOD_CATEGORY,
-		),
-	));
+    register_post_type(
+        GFGB_POST_TYPE_FOOD,
+        array(
+            'labels' => array(
+                'name' => __('Food', 'gfgb'),
+                'singular_name' => __('Food', 'gfgb'),
+            ),
+            'public' => true,
+            'hierarchical' => true,
+            'exclude_from_search' => false,
+            'publicly_queryable' => true,
+            'show_in_rest' => true,
+            'supports' => array( 'title', 'custom-fields', 'editor', 'trackbacks', 'excerpt', 'page-attributes' ),
+            'has_archive' => true,
+            'delete_with_user' => false,
+            'menu_icon' => 'dashicons-carrot',
+            'rewrite' => array(
+                'slug' => GFGB_SLUG_FOOD,
+                'with_front' => false,
+            ),
+        )
+    );
 });
 
+/**
+ * Register custom fields.
+ */
 add_action('carbon_fields_register_fields', function () {
-    Container::make('term_meta', __('Term Options'))
-        ->where('term_taxonomy', '=', GFGB_TAXONOMY_FOOD_CATEGORY)
+    Container::make('post_meta', __('Post Options'))
+        ->where('post_type', 'IN', [GFGB_POST_TYPE_FOOD])
         ->add_fields([
-			Field::make('text', 'priority', __('Priority'))
-				->set_attributes([
-					'type' => 'number',
-					'step' => '1',
-					'min' => '0',
-				])
-				->set_default_value('10')
-				->set_required(true),
-			Field::make('image', 'image', __('Image'))
-				->set_required(true),
-			Field::make('association', 'page', __('Page'))
-				->set_types([
-					['type' => 'post', 'post_type' => 'page'],
-				])
-				->set_max(1),
-		]);
-	
-	Container::make('post_meta', __('Post Options'))
-		->where('post_type', 'IN', ['page', GFGB_POST_TYPE_FOOD])
-        ->add_fields([
-			Field::make('textarea', 'quiz_json', __('Quiz'))
-				->set_rows(10),
-		]);
+            Field::make('image', 'image', __('Image'))
+                ->set_required(true),
+            Field::make('textarea', 'quiz_json', __('Quiz'))
+                ->set_rows(10),
+        ]);
 });
 
+/**
+ * Register shortcodes.
+ */
 add_action('init', function () {
-	add_shortcode('gfgb_food_categories', function ($atts, $content, $shortcode_tag) {
-		return gfgb_shortcode_food_categories($atts, $content, $shortcode_tag);
-	});	
+    add_shortcode('gfgb_food_list', function ($atts, $content, $shortcode_tag) {
+        return gfgb_shortcode_food_list($atts, $content, $shortcode_tag);
+    });
 
-	add_shortcode('gfgb_quiz', function ($atts, $content, $shortcode_tag) {
-		return gfgb_shortcode_quiz($atts, $content, $shortcode_tag);
-	});	
+    add_shortcode('gfgb_quiz', function ($atts, $content, $shortcode_tag) {
+        return gfgb_shortcode_quiz($atts, $content, $shortcode_tag);
+    });
 });
 
-add_filter('pre_get_terms', function ($query) {
-	/** @var WP_Term_Query $query */
-	$taxonomies = $query->query_vars['taxonomy'] ?? [];
-	$isOnlyFoodCategory = count($taxonomies) === 1 && isset($taxonomies[0]) && $taxonomies[0] === GFGB_TAXONOMY_FOOD_CATEGORY;
-	if (!$isOnlyFoodCategory) {
-		return $query;
-	}
+/**
+ * Allow pages and food posts to have non-published parent posts.
+ */
+foreach ([
+    'page_attributes_dropdown_pages_args',
+    'quick_edit_dropdown_pages_args',
+] as $filter) {
+    add_filter($filter, function ($args) {
+        // Dropdown must be for parent post.
+        if ($args['name'] !== 'post_parent') {
+            return;
+        }
+        // Must be a specified post type.
+        $allowed_post_types = ['page', GFGB_POST_TYPE_FOOD];
+        if (!in_array($args['post_type'], $allowed_post_types, true)) {
+            return;
+        }
+        $values = ['publish', 'pending', 'draft', 'private'];
+        $args['post_status'] = array_unique(array_merge($args['post_status'] ?? [], $values));
+        return $args;
+    }, 11, 1);
+}
 
-	$query_vars = &$query->query_vars;
-	if (($query_vars['orderby'] ?? null) === 'priority') {
-		$query_vars['orderby'] = 'priority';
-		$query_vars['meta_query'] = [
-			'priority' => [
-				'key' => 'priority',
-				'compare' => 'EXISTS',
-				'type' => 'SIGNED',
-			],
-		];
-		$query->meta_query->parse_query_vars( $query_vars );
-	}
+/**
+ * Get hierarchical breadcrumbs for custom post type food.
+ */
+// add_action('woocommerce_get_breadcrumb', function ($breadcrumps) {
+//     global $post;
+//     if ($post->post_type === GFGB_POST_TYPE_FOOD) {
+//         return gfgb_wc_get_hierarchical_breadcrumbs($breadcrumps, $post);
+//     }
+// }, 11, 1);
 
+/**
+ * Apply default food query vars.
+ */
+add_filter('pre_get_posts', function ($query) {
+    /** @var \WP_Query $query */
+    $is_applicable = !$query->is_admin
+        && $query->is_archive
+        && $query->query_vars['post_type'] === 'food';
+    if (!$is_applicable) {
+        return $query;
+    }
+    // By default only get food at the root level.
+    if (!is_int($query->query_vars['post_parent'])) {
+        $query->query_vars['post_parent'] = 0;
+    }
+    // By default get all food posts.
+    if (!isset($query->query_vars['posts_per_page'])) {
+        $query->query_vars['posts_per_page'] = -1;
+    };
     return $query;
-}, 10, 2 );
-
-add_filter('manage_edit-' . GFGB_TAXONOMY_FOOD_CATEGORY . '_columns', function ($columns) {
-	$columns['priority'] = __('Priority');
-	return $columns;
 });
 
-add_filter('manage_edit-' . GFGB_TAXONOMY_FOOD_CATEGORY . '_sortable_columns', function ($columns) {
-	$columns['priority'] = 'priority';
-	return $columns;
-});
-
-add_filter('manage_' . GFGB_TAXONOMY_FOOD_CATEGORY . '_custom_column', function ($string, $column_name, $term_id) {
-	if ($column_name === 'priority') {
-		$priority = carbon_get_term_meta($term_id, 'priority');
-		return $priority;
-	}
-}, 10, 3);
-
-
+/**
+ * Boot carbon fields.
+ */
 add_action('after_setup_theme', function () {
     require_once GFGB_PLUGIN_DIR . '/carbon-fields/vendor/autoload.php';
     \Carbon_Fields\Carbon_Fields::boot();

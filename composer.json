@@ -1,0 +1,23 @@
+{
+    "name": "hbgl/good-food-gone-bad-wp-plugin",
+    "authors": [
+        {
+            "name": "hbgl",
+            "email": "gohbgl@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "GfgbBuild\\": "build/"
+        }
+    },
+    "scripts": {
+        "build": "GfgbBuild\\ComposerScripts::build",
+        "clean": "GfgbBuild\\ComposerScripts::clean",
+        "build-i18n": "GfgbBuild\\ComposerScripts::build_i18n"
+    },
+    "require-dev": {
+        "symfony/filesystem": "^5.2",
+        "nelexa/zip": "^3.3"
+    }
+}

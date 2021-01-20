@@ -2,10 +2,28 @@
 
 # 1. Projekt erstellen
 
-## 1.1 Sprachdateien generieren
+Zum Kompilieren der Übersetzungen muss das gettext Programm `msgfmt` muss im Pfad liegen ([gettext herunterladen](https://www.gnu.org/software/gettext/gettext.html)).
+
+Composer Abhängigkeiten müssen installiert werden:
 
 ```
-php ./build/make-i18n.php
+composer install
 ```
 
-Das gettext Programm `msgfmt` muss im Pfad liegen ([gettext herunterladen](https://www.gnu.org/software/gettext/gettext.html)).
+## 1.1 Plugin Zip erstellen
+
+```
+composer run build
+```
+
+## 1.2 Sprachdateien generieren
+
+```
+composer run build-i18n
+```
+
+## 1.3 Clean
+
+```
+composer run clean
+```
